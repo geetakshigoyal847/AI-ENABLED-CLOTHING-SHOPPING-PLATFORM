@@ -1,0 +1,258 @@
+<?php
+
+session_start();
+
+
+require_once __DIR__ . '/../includes/config.php';
+
+require_once __DIR__ . '/../includes/db.php';
+
+
+
+if(!isset($_SESSION['user_id'])){
+
+
+    header("Location: ".BASE_URL."auth/login.php");
+
+    exit;
+
+
+}
+
+
+
+include __DIR__ . '/../includes/header.php';
+
+
+
+$user_id = $_SESSION['user_id'];
+
+
+
+$result = mysqli_query(
+
+$conn,
+
+"SELECT * FROM orders 
+
+WHERE user_id='$user_id'
+
+ORDER BY id DESC"
+
+);
+
+
+
+?>
+
+
+
+<h1>
+My Orders
+</h1>
+
+
+
+
+
+<?php
+
+
+
+if(mysqli_num_rows($result)==0){
+
+
+echo "
+
+<div class='panel'>
+
+<h3>
+No orders found
+</h3>
+
+</div>
+
+
+";
+
+
+}
+
+
+
+
+
+
+while($order=mysqli_fetch_assoc($result)){
+
+
+
+?>
+
+
+
+<div class="panel">
+
+
+
+<h2>
+
+Order #<?= $order['id'] ?>
+
+</h2>
+
+
+
+<p>
+
+Date:
+
+<?= $order['order_date'] ?>
+
+</p>
+
+
+
+<p>
+
+Status:
+
+<?= $order['status'] ?>
+
+</p>
+
+
+
+
+<p>
+
+Total:
+
+$<?= number_format($order['total'],2) ?>
+
+</p>
+
+
+
+
+
+<h3>
+Products
+</h3>
+
+
+
+
+
+<?php
+
+
+
+$items = mysqli_query(
+
+$conn,
+
+
+"
+
+SELECT 
+
+products.name,
+
+products.image,
+
+order_items.quantity,
+
+order_items.price
+
+
+FROM order_items
+
+
+JOIN products
+
+ON products.id = order_items.product_id
+
+
+
+WHERE order_id='{$order['id']}'
+
+"
+
+);
+
+
+
+
+while($item=mysqli_fetch_assoc($items)){
+
+
+
+echo "
+
+<div>
+
+
+<img 
+
+src='".BASE_URL."assets/images/{$item['image']}'
+
+width='80'>
+
+
+<p>
+
+{$item['name']}
+
+</p>
+
+
+<p>
+
+Quantity: {$item['quantity']}
+
+</p>
+
+
+<p>
+
+Price: $
+
+".number_format($item['price'],2)."
+
+</p>
+
+
+
+</div>
+
+
+<hr>
+
+
+";
+
+
+}
+
+
+
+?>
+
+
+
+
+</div>
+
+
+
+<?php
+
+}
+
+
+
+include __DIR__ . '/../includes/footer.php';
+
+
+?>

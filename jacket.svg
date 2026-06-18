@@ -1,0 +1,18 @@
+<?php
+
+session_start();
+
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/db.php';
+
+
+if(!isset($_SESSION['user_id']) || $_SESSION['role'] != 'admin'){
+
+    header("Location: ".BASE_URL."auth/login.php");
+
+    exit;
+
+}
+
+
+?> ?><h1>Admin Dashboard</h1><div class="admin-cards"><div class="panel">Total Users <b><?= mysqli_fetch_row(mysqli_query($conn,'SELECT COUNT(*) FROM users'))[0] ?></b></div><div class="panel">Total Products <b><?= mysqli_fetch_row(mysqli_query($conn,'SELECT COUNT(*) FROM products'))[0] ?></b></div><div class="panel">Total Orders <b><?= mysqli_fetch_row(mysqli_query($conn,'SELECT COUNT(*) FROM orders'))[0] ?></b></div><div class="panel">Revenue <b>$<?= number_format((float)mysqli_fetch_row(mysqli_query($conn,'SELECT COALESCE(SUM(total),0) FROM orders'))[0],2) ?></b></div></div><p><a class="btn" href="<?= BASE_URL ?>admin/products.php">Manage Products</a></p><div class="panel"><h2>Sales Analytics</h2><p>This dashboard supports product management, inventory control, customer orders and sales monitoring.</p></div><?php include __DIR__ . '/../includes/footer.php'; ?>

@@ -1,0 +1,1 @@
+<?php require_once __DIR__ . '/../includes/db.php'; if(!logged_in()) redirect_to('auth/login.php'); $id=(int)($_GET['id']??0); $uid=(int)$_SESSION['user_id']; mysqli_query($conn,"DELETE FROM wishlist WHERE user_id=$uid AND product_id=$id"); redirect_to('wishlist/index.php'); ?>

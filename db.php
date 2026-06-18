@@ -1,0 +1,1 @@
+<?php require_once __DIR__ . '/../includes/db.php'; $id=(int)($_GET['id']??0); if(isset($_SESSION['cart'][$id])) unset($_SESSION['cart'][$id]); redirect_to('cart/index.php'); ?>

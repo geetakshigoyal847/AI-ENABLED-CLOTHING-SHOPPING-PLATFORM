@@ -1,0 +1,1 @@
+<?php require_once __DIR__ . '/../includes/db.php'; if(!admin_user()) redirect_to('auth/login.php'); $id=(int)($_GET['id']??0); mysqli_query($conn,'DELETE FROM products WHERE id='.$id); redirect_to('admin/products.php'); ?>

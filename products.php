@@ -1,0 +1,1 @@
+<?php require_once __DIR__ . '/../includes/db.php'; if(!logged_in()) redirect_to('auth/login.php'); $id=(int)($_GET['id']??0); $uid=(int)$_SESSION['user_id']; if($id>0) mysqli_query($conn,"INSERT IGNORE INTO wishlist(user_id,product_id) VALUES($uid,$id)"); redirect_to('wishlist/index.php'); ?>
